@@ -1,28 +1,28 @@
-diff -ur lda.svi/R/lda_svi.R lda.svi_original/R/lda_svi.R
---- lda.svi/R/lda_svi.R	2020-04-23 11:05:06.000000000 +0200
-+++ lda.svi/R/lda_svi.R	2019-07-08 15:19:00.000000000 +0200
-@@ -29,12 +29,19 @@
+diff -rupN lda.svi/R/lda_svi.R lda.svi-new/R/lda_svi.R
+--- lda.svi/R/lda_svi.R	2020-04-23 11:14:37.000000000 +0200
++++ lda.svi-new/R/lda_svi.R	2020-04-23 11:14:25.000000000 +0200
+@@ -29,19 +29,11 @@
  
  lda_svi <- function(dtm,passes=10,batchsize=256,maxiter=100,K,eta=1/K,alpha=1/K,kappa=0.7,tau_0=1024,tidy_output=TRUE){
  
-+	if (is(dtm,"DocumentTermMatrix")){
-+		if (!any(attr(dtm,'weighting') %in% c('term frequency','tf'))){
-+			stop('The DocumentTermMatrix object must use term frequency weighting')
-+		}
-+	}
-+
-+	doc_ids <- dtm$i - 1#the c++ code expects 0-indexed ids
-+	docs <- dtm$dimnames$Docs
- 
--	doc_ids <- dtm@i
--  term_ids <- dtm@j
--  docs <- dtm@Dimnames[[1]]
--  terms <- dtm@Dimnames[[2]]
--  counts <- dtm@x
-+	term_ids <- dtm$j - 1#the c++ code expect 0-indexed ids
-+	terms <- dtm$dimnames$Terms
-+	
-+	counts <- dtm$v
+-	if (is(dtm,"DocumentTermMatrix")){
+-		if (!any(attr(dtm,'weighting') %in% c('term frequency','tf'))){
+-			stop('The DocumentTermMatrix object must use term frequency weighting')
+-		}
+-	}
+-
+-	doc_ids <- dtm$i - 1#the c++ code expects 0-indexed ids
+-	docs <- dtm$dimnames$Docs
+-
+-	term_ids <- dtm$j - 1#the c++ code expect 0-indexed ids
+-	terms <- dtm$dimnames$Terms
+-	
+-	counts <- dtm$v
++  doc_ids <- dtm@i
++  term_ids <- dtm@j
++  docs <- dtm@Dimnames[[1]]
++  terms <- dtm@Dimnames[[2]]
++  counts <- dtm@x
  
  	res_list <- lda_online_cpp(doc_ids,term_ids,counts,K,passes,batchsize,maxiter=maxiter,eta=eta,alpha=alpha,tau_0=tau_0,kappa=kappa)
  
