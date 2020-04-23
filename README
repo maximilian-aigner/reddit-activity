@@ -5,7 +5,7 @@ Summary
 =======
 This repository contains scripts to analyse user activities on the website http://reddit.com. Included are:
 
-* A python script to stream xz files downloaded from pushshift.io/reddit/comments/ and enter them into a SQLite database.
+* A Python script to stream xz files downloaded from http://pushshift.io/reddit/comments/ and enter them into a SQLite database.
 * A SQLite script to trim bot comments and subreddits/users with low comment counts from the data.
 * R files for:
   * Data preparation
@@ -17,5 +17,4 @@ Technical note
 ==============
 
 To perform high-dimensional LDA we use the `lda.svi` package, which must be patched (using the patchfile in patch/ directory) to work on generic sparse matrices.
-
 
