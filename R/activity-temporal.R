@@ -65,16 +65,14 @@ mixture_of_multinomials <- multmixEM(t(flattened), k = 3)
 lda_activity <- lda_svi(subreddit_activity, K = 5, tidytext = FALSE)
 
 # Re-stack the vectors into images
-reshaped <- simplify2array(lapply(as.list(as.data.frame(t(mixed$theta))), function(u) {
+reshaped_mixture <- simplify2array(lapply(as.list(as.data.frame(t(mixed$theta))), function(u) {
   matrix(u, nrow = 7, ncol = 24)
 }))
 
-dimnames(reshaped) <- list(dimnames(subreddit_activity)[[1]],
-                           dimnames(subreddit_activity)[[2]],
-                           paste0("Class", 1:dim(reshaped)[3]))
-
-###############################
-# Mixture of multinomials model
-###############################
+dimnames(reshaped_mixture) <- list(
+                                dimnames(subreddit_activity)[[1]],
+                                dimnames(subreddit_activity)[[2]],
+                                paste0("Class", 1:dim(reshaped)[3])
+                              )
 
 
