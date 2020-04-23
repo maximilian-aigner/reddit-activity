@@ -1,0 +1,14 @@
+b589a48667252e3f6fdf163aab4d3cb2 *DESCRIPTION
+eceade5eecc308667060ad7678672db5 *LICENSE
+1fe4b947cae7cf8e8647d190822639e2 *NAMESPACE
+a021881a7d32cc7c24d9a8064437b56f *R/RcppExports.R
+e2cadd855e127e485aac72087d35e668 *R/lda.svi-package.R
+93fbe8541e756d38dd0a2d7100d5c7b0 *R/lda_svi.R
+a2a6a532681e9698897dc7ebb911e64c *man/lda.svi-package.Rd
+7e6e636a5be3be33db4d41a6d1963ef0 *man/lda_svi.Rd
+252b1d6c0a00dbbc5c0dd8910cf1bade *src/LDA_State.cpp
+d2d14de06cb10e5f83eb3b7b2029b6b6 *src/Makevars.win
+b56dbacd387d1dc2beaf38cb98047c9c *src/R_interface.cpp
+c0fe2cc13b6c5444f04cbb5b3598c38c *src/RcppExports.cpp
+555aa75f8f698a0dac58d392d1327bbd *src/dirichlet_expectation.cpp
+b972ea5f595897f03e8e5f68c1c35873 *src/lda_svi.h
