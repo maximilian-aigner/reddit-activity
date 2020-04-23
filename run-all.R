@@ -1,3 +1,3 @@
-source('data-preparation.R')
-source('community-detection.R')
-source('activity-temporal.R')
+source('R/data-preparation.R')
+source('R/community-detection.R')
+source('R/activity-temporal.R')
