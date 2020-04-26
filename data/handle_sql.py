@@ -8,6 +8,7 @@ c = conn.cursor()
 
 i = 0
 for line in sys.stdin:
+  i = i + 1
   json_obj = json.loads(line)
   if json_obj['author'] == '[deleted]':
     continue
