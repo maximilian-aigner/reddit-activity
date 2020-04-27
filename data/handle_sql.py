@@ -14,7 +14,7 @@ for line in sys.stdin:
     continue
   vals = [json_obj['created_utc'], json_obj['author'], json_obj['subreddit'], json_obj['score']]
   c.execute("INSERT INTO comments VALUES (?,?,?,?)", vals)
-  if i % 100000 == 0: conn.commit()
+  if i % 1000000 == 0: conn.commit()
 
 conn.commit()
 conn.close()
