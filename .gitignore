@@ -42,3 +42,4 @@ data/cleaned.csv
 patch/lda.svi
 patch/lda.svi/*
 patch/lda.svi_0.1.0.tar.gz
+data/comments.sqlite
