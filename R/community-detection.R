@@ -3,6 +3,7 @@
 library(Matrix)
 library(lda.svi)
 library(tibble)
+library(NMFN)
 
 posts_crosstab <- xtabs(~ author + subreddit, df, sparse = TRUE)
 
