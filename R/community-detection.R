@@ -46,7 +46,7 @@ lda_topics <- dcast(lda$theta, document ~ topic) %>% column_to_rownames('documen
 # - higher information content per matrix entry
 
 
-wrmf <- WRMF$new(rank = 30, non_negative = TRUE)
+wrmf <- WRMF$new(rank = 40, non_negative = TRUE)
 W <- wrmf$fit_transform(crosstab_tfidf, 25, 0.001)
 H <- wrmf$components
 
