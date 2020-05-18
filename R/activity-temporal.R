@@ -2,12 +2,13 @@
 
 library(multiway) # Other choice: rTensor, but I found it difficult to use
 library(lattice)
+library(lubridate)
 library(mixtools)
 
-within(df,
-     day_of_week <- factor(wday(created, label = TRUE)),
+df <- within(df, {
+     day_of_week <- factor(wday(created, label = TRUE))
      hour <- hour(created)
-)
+})
 
 # Compute the three-way tensors
 # TODO: Could speed this up by making sparse slices for each day (sparse = TRUE in xtabs())
@@ -44,8 +45,10 @@ plot_temporal_profiles <- function(factor1, factor2, ...) {
   profiles <- lapply(1:ncol(factor1), function(i) {
     factor1[,i] %*% t(factor2[,i])
   })
-  invisible(lapply(profiles, function(p)
-    levelplot(t(profiles), col.regions = hcl.colors(100))))
+  invisible(lapply(profiles, function(p) {
+    readline(prompt = "Press for next plot")
+    levelplot(t(p), col.regions = hcl.colors(100))
+    }))
 }
 
 ###############################
@@ -59,20 +62,34 @@ ntables <- dim(subreddit_activity)[3]
 subreddit_activity_flattened <- matrix(subreddit_activity, 7*24, ntables)
 
 # Multinomial mixture algorithm from mixtools
-mixture_of_multinomials <- multmixEM(t(flattened), k = 3)
+mixture_of_multinomials <- multmixEM(t(subreddit_activity_flattened), k = 10)
 
 # LDA
-lda_activity <- lda_svi(subreddit_activity, K = 5, tidytext = FALSE)
+class(subreddit_activity_flattened) <- "matrix"
+sparse_activity <- as(subreddit_activity_flattened, "TsparseMatrix")
+lda_activity <- lda_svi(t(sparse_activity), K = 5)
+
+lda_beta <- dcast(lda_activity$beta, term ~ topic) %>% column_to_rownames('term')
 
 # Re-stack the vectors into images
-reshaped_mixture <- simplify2array(lapply(as.list(as.data.frame(t(mixed$theta))), function(u) {
+reshaped_mixture <- simplify2array(lapply(as.list(as.data.frame(t(mixture_of_multinomials$theta))), function(u) {
+  matrix(u, nrow = 7, ncol = 24)
+}))
+
+reshaped_lda <- simplify2array(lapply(as.list(as.data.frame(lda_beta)), function(u) {
   matrix(u, nrow = 7, ncol = 24)
 }))
 
 dimnames(reshaped_mixture) <- list(
                                 dimnames(subreddit_activity)[[1]],
                                 dimnames(subreddit_activity)[[2]],
-                                paste0("Class", 1:dim(reshaped)[3])
+                                paste0("Class", 1:dim(reshaped_mixture)[3])
                               )
+
+dimnames(reshaped_lda) <- list(
+  dimnames(subreddit_activity)[[1]],
+  dimnames(subreddit_activity)[[2]],
+  paste0("Class", 1:dim(reshaped_lda)[3])
+)
 
 
