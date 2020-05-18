@@ -21,6 +21,7 @@ To perform high-dimensional LDA we use the `lda.svi` package, which must be patc
 To do this, first download lda_svi from CRAN:
 https://cran.r-project.org/web/packages/lda.svi/index.html
 and extract to the patch/ directory.
-Then, run the command `patch -p0` while in the patch/ directory.
+Then, run the command `patch -p0 < patch_lda_svi.diff`
+while in the patch/ directory.
 Finally, compile and install the package by running:
 R CMD build lda.svi_0.1.0 && R CMD install lda.svi_0.1.0.tar.gz
