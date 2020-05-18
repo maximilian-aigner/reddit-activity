@@ -3,7 +3,7 @@ delete from comments
   where author in
     (select author from comments 
      group by author
-     having count(distinct subreddit) < 3)
+     having count(distinct subreddit) < 3) or count(*) < 5
   or subreddit in
     (select subreddit from comments
      group by subreddit
