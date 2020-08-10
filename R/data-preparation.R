@@ -8,10 +8,10 @@ df <- vroom('data/cleaned.csv',
              col_names = c("created", "author", "subreddit", "score"),
              col_types = "icci")
 
-# Perform the analysis on a fraction of the full dataset
-ratio <- 1
-asample <- sample(1:nrow(df), size = floor(ratio * nrow(df)), replace = FALSE)
-df <- df[asample,]
+# Perform the analysis on a fraction of the full dataset (OPTIONAL)
+# ratio <- 1
+# asample <- sample(1:nrow(df), size = floor(ratio * nrow(df)), replace = FALSE)
+# df <- df[asample,]
 
 # Adjust for timezone (should be EST-based)
 df$created <- as.POSIXct(as.numeric(df$created) - 5 * 60 * 60, origin = "1970-01-01")

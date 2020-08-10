@@ -6,21 +6,27 @@ library(tibble)
 library(rsparse)
 library(irlba)
 
-posts_crosstab <- xtabs(~ author + subreddit, df, sparse = TRUE)
+if(!file.exists('data/posts_crosstab.txt')) {
+  posts_crosstab <- xtabs(~ author + subreddit, df, sparse = TRUE)
+  
+  # For other methods, it is convienent to have (i, j)-indexing
+  # rather than the default (i, p) index in dgCmatrix
+  posts_crosstab <- as(posts_crosstab, "TsparseMatrix")
+  writeMM(posts_crosstab,file='data/posts_crosstab.txt')
+} else {
+  posts_crosstab <- readMM(file='data/posts_crosstab.txt')
+}
 
-# For other methods, it is convienent to have (i, j)-indexing
-# rather than the default (i, p) index in dgCmatrix
-posts_crosstab <- as(posts_crosstab, "TsparseMatrix")
 crosstab_tfidf <- log1p(posts_crosstab)
 idfs <- log( ncol(posts_crosstab) / rowSums(posts_crosstab > 0))
 crosstab_tfidf <- crosstab_tfidf * idfs
+
 
 ##############################
 # Singular Value Decomposition
 ##############################
 
 # Classic SVD decomposition of the TF-IDF weighted matrix
-# Compute the TF-IDF weighted matrix
 
 ssvd <- irlba(crosstab_tfidf, nv = 100, verbose = TRUE)
 rownames(ssvd$u) <- dimnames(posts_crosstab)[["author"]]
@@ -46,12 +52,12 @@ lda_topics <- dcast(lda$theta, document ~ topic) %>% column_to_rownames('documen
 # - higher information content per matrix entry
 
 
-wrmf <- WRMF$new(rank = 40, non_negative = TRUE)
+wrmf <- WRMF$new(rank = 100, non_negative = TRUE)
 W <- wrmf$fit_transform(crosstab_tfidf, 25, 0.001)
 H <- wrmf$components
 
 # See highest subs per topic
-View(apply(H, 1, function(scores) names(head(sort(scores, decreasing = TRUE), 10))))
+View(apply(H, 1, function(scores) names(head(sort(scores, decreasing = TRUE), 20))))
 
 # Recommendations
 recommend_sub <- function(name, k = 20) {
